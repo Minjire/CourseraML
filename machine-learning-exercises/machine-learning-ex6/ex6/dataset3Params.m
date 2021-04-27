@@ -23,10 +23,30 @@ sigma = 0.3;
 %        mean(double(predictions ~= yval))
 %
 
+C_list = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]';
+sigma_list = [0.01, 0.03, 0.1, 0.3, 1, 3, 10, 30]';
 
+prediction_error = zeros(length(C_list), length(sigma_list));
 
+for i = 1:length(C_list)
+    for j = 1:length(sigma_list)
+        C_test = C_list(i);
+        sigma_test = sigma_list(j);
+        model = svmTrain(X, y, C_test, @(x1, x2) ...
+            gaussianKernel(x1, x2, sigma_test));
+        predictions = svmPredict(model, Xval);
+        prediction_error(i, j) = mean(double(predictions ~= yval));
+    end
+end
 
+% find row and column resulting in minimum error
+[values, row_index] = min(prediction_error);
+[~, col] = min(values);
+row = row_index(col);
 
+% C and sigma corresponding to min(prediction_error)
+C = C_list(row);
+sigma = sigma_list(col);
 
 
 % =========================================================================
