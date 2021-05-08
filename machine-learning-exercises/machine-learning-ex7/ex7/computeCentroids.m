@@ -8,9 +8,9 @@ function centroids = computeCentroids(X, idx, K)
 %   example, and K, the number of centroids. You should return a matrix
 %   centroids, where each row of centroids is the mean of the data points
 %   assigned to it.
-%
+%% Useful variables
 
-% Useful variables
+
 [m n] = size(X);
 
 % You need to return the following variables correctly.
@@ -27,7 +27,10 @@ centroids = zeros(K, n);
 %
 
 
-
+for i = 1:K
+  idx_i = find(idx==i);       %indexes of all the input which belongs to cluster j
+  centroids(i,:) = mean(X(idx_i,:)); % calculating mean using built-in function
+end
 
 
 
